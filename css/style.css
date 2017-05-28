@@ -6,7 +6,29 @@ margin: auto;
 
 }
 
-button {
+table {
+
+  border-collapse: collapse;
+
+}
+
+td {
   width: 50px;
   height: 50px;
+  border-style: solid;
+  background-color: #d9d8d8;
 }
+
+tr {
+
+
+}
+
+.one {
+
+}
+
+.bomb
+ {
+   background-color: red;
+ }
