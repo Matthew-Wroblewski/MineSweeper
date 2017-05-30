@@ -1,9 +1,20 @@
+body {
 
+}
 .container {
 
+display: flex;
 width: 900px;
 margin: auto;
+height: 800px;
+justify-content: center;
+align-items: center;
 
+}
+
+p {
+  text-align: center;
+  font-weight: bold;
 }
 
 table {
@@ -31,4 +42,8 @@ tr {
 .bomb
  {
    background-color: red;
+ }
+
+ .noBomb {
+   background-color: beige;
  }
