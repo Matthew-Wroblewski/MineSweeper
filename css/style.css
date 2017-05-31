@@ -13,21 +13,24 @@ align-items: center;
 }
 
 p {
-  text-align: center;
-  font-weight: bold;
+    margin: 0px;
+    color: blue;
 }
 
 table {
-
-  border-collapse: collapse;
-
+/* border-collapse: collapse; */
 }
 
 td {
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
+  font-size: 18pt;
+  text-align: center;
+  box-shadow: 1.5px 1.5px;
+  font-weight: bold;
   border-style: solid;
   background-color: #d9d8d8;
+  max-height: 1px;
 }
 
 tr {
@@ -45,5 +48,5 @@ tr {
  }
 
  .noBomb {
-   background-color: beige;
+   background-color: black;
  }

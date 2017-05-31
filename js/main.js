@@ -3,7 +3,7 @@ $( document ).ready(function() {
   console.log( "ready!" );
   /// 1/5 mines
 
-  numMines = 7;
+  numMines = 20;
   plantedMines = 0;
   var boardMatrix = [];
   var revealedMatrix = [];
@@ -40,7 +40,7 @@ $( document ).ready(function() {
       if (boardMatrix[row][col] === true)
       continue;
       boardMatrix[row][col] = true;
-      $(".cell-row-"+row+".cell-column-"+col+"").addClass("bomb");
+      //$(".cell-row-"+row+".cell-column-"+col+"").addClass("bomb");
       //    $(".bomb").css({"background-color": "yellow"});
 
 
@@ -106,6 +106,22 @@ $( document ).ready(function() {
           boardMatrix[i][j] = numBombs;
         }
         $("p").hide();
+        if (boardMatrix[i][j] === 1)
+          $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "blue"});
+        else if (boardMatrix[i][j] === 2)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "green"});
+        else if (boardMatrix[i][j] === 3)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "red"});
+        else if (boardMatrix[i][j] === 4)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "purple"});
+        else if (boardMatrix[i][j] === 5)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "maroon"});
+        else if (boardMatrix[i][j] === 6)
+          $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "#13a798"});
+        else if (boardMatrix[i][j] === 7)
+          $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "black"});
+        else if (boardMatrix[i][j] === 8)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+" > p").css({"color": "brown"});
 
 
       }
@@ -118,13 +134,26 @@ $( document ).ready(function() {
   function displayClicked (row,col) {
 
 
-    if (boardMatrix[row][col] !== 0) {
+    if (boardMatrix[row][col] === true) {
+     $(".cell-row-"+row+".cell-column-"+col+"").addClass("bomb");
+   }
+
+    else if (boardMatrix[row][col] > 0) {
       console.log("hi");
       revealedMatrix[row][col] = true;
       $(".cell-row-"+row+".cell-column-"+col+" > p").show();
     }
 
    else {
+    if (revealedMatrix[row][col] === false) {
+      revealedMatrix[row][col] = true;
+      if (boardMatrix[row][col] === 0) {
+      $(".cell-row-"+(row)+".cell-column-"+(col)+"").addClass("noBomb");
+      displayClicked(row,col);
+      }
+    }
+
+
     if (row !== 0 && col !== 0 && revealedMatrix[row-1][col-1] === false)
     {
       revealedMatrix[row-1][col-1] = true;
@@ -221,4 +250,7 @@ $( document ).ready(function() {
   drawBoard();
   plantMines();
   calcAdjBombs();
+  $("p > label:contains('1')").each(function () {
+    $(this).html($(this).html().replace("1", "<span class='red'>*</span>"));
+});
 });
