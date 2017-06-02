@@ -3,7 +3,7 @@ $( document ).ready(function() {
   console.log( "ready!" );
   /// 1/5 mines
 
-  numMines = 20;
+  numMines = 7;
   plantedMines = 0;
   var boardMatrix = [];
   var revealedMatrix = [];
@@ -246,6 +246,12 @@ $( document ).ready(function() {
     var row = $(this).parent().parent().children().index($(this).parent());
     displayClicked(row,col);
   });
+
+  $("body").on("click", ".dropdown-content", function() {
+    var difficulty = $('.dropdown-content option[value="Hard"]').attr('selected', true);
+  });
+
+
 
   drawBoard();
   plantMines();
