@@ -3,22 +3,53 @@ $( document ).ready(function() {
   console.log( "ready!" );
   /// 1/5 mines
 
-  numMines = 7;
-  plantedMines = 0;
+  var plantedMines = 0;
+  var size;
   var boardMatrix = [];
   var revealedMatrix = [];
 
+  var columns, rows, numMines;
+
+  function init() {
+    drawBoard();
+    plantMines();
+    calcAdjBombs();
+  }
 
   function drawBoard () {
+    debugger;
+    if (size !== "Large"  && size !== "Normal"  && size !== "Small") {
+      size = "Normal";
+    }
+
+    plantedMines = 0;
+    if (size === "Normal") {
+      columns = 13;
+      rows = 13;
+      numMines = (rows * columns) * 0.20;
+    }
+
+    else if (size === "Large") {
+      columns = 20;
+      rows = 20;
+      numMines = (rows * columns) * 0.20;
+    }
+
+    else {
+      columns = 7;
+      rows = 7;
+      numMines = (rows * columns) * 0.20;
+    }
+
 
     var i, j, fieldElement;
-    for (i = 0; i < 7; i++)
+    for (i = 0; i < rows; i++)
     {
       $("table").append("<tr class='board-row-" + i + "'></tr>");
       boardMatrix[i] = [];
       revealedMatrix[i] = [];
 
-      for (j = 0; j < 5; j++)
+      for (j = 0; j < columns; j++)
       {
         $(".board-row-" + i + "").append("<td class='cell-row-" + i + " cell-column-" + j + "'>  </td>");
         boardMatrix[i][j] = [];
@@ -29,14 +60,13 @@ $( document ).ready(function() {
       $("tr").append("</tr>");
 
     }
-
   }
 
   function plantMines () {
-    var i, row, col;
+    var row, col;
     do {
-      row = Math.floor(Math.random() * 7);
-      col = Math.floor(Math.random() * 5);
+      row = Math.floor(Math.random() * rows);
+      col = Math.floor(Math.random() * columns);
       if (boardMatrix[row][col] === true)
       continue;
       boardMatrix[row][col] = true;
@@ -58,8 +88,8 @@ $( document ).ready(function() {
 
   function calcAdjBombs ()  {
     var numBombs;
-    for (i = 0; i < 7; i++) {
-      for (j = 0; j < 5; j++)
+    for (i = 0; i < rows; i++) {
+      for (j = 0; j < columns; j++)
       {
         numBombs = 0;
 
@@ -76,25 +106,25 @@ $( document ).ready(function() {
         if (boardMatrix[i][j-1] === true) {
           numBombs++;
         }
-        if (j !== 0 && i !== 6)
+        if (j !== 0 && i !== (rows-1))
         if (boardMatrix[i+1][j-1] === true) {
           numBombs++;
         }
 
-        if (i !== 0 && j !== 4)
+        if (i !== 0 && j !== (columns-1))
         if (boardMatrix[i-1][j+1] === true) {
           numBombs++;
         }
 
-        if (i !== 6 && j !== 4)
+        if (i !== (rows-1) && j !== (columns-1))
         if (boardMatrix[i+1][j+1] === true) {
           numBombs++;
         }
-        if (i !== 6)
+        if (i !== (rows-1))
         if (boardMatrix[i+1][j] === true) {
           numBombs++;
         }
-        if (j !== 4)
+        if (j !== (columns-1))
         if (boardMatrix[i][j+1] === true) {
           numBombs++;
         }
@@ -136,6 +166,15 @@ $( document ).ready(function() {
 
     if (boardMatrix[row][col] === true) {
      $(".cell-row-"+row+".cell-column-"+col+"").addClass("bomb");
+     debugger;
+     for (i = 0; i < rows; i++) {
+       for (j=0; j < columns; j++) {
+          $(".cell-row-"+i+".cell-column-"+j+" > p").show();
+          if (boardMatrix[i][j] === true)
+            $(".cell-row-"+(i)+".cell-column-"+(j)+"").addClass("bomb");
+       }
+     }
+     alert("You've clicked on a bomb.  GAME OVER.");
    }
 
     else if (boardMatrix[row][col] > 0) {
@@ -184,7 +223,7 @@ $( document ).ready(function() {
       }
       else  $(".cell-row-"+(row)+".cell-column-"+(col-1)+" > p").show();
     }
-    if (row !== 6 && col !== 0  && revealedMatrix[row+1][col-1] === false )
+    if (row !== (rows-1) && col !== 0  && revealedMatrix[row+1][col-1] === false )
     {
       revealedMatrix[row+1][col-1] = true;
 
@@ -195,7 +234,7 @@ $( document ).ready(function() {
       else $(".cell-row-"+(row+1)+".cell-column-"+(col-1)+" > p").show();
     }
 
-    if (row !== 0 && col !== 4 && revealedMatrix[row-1][col+1] === false)
+    if (row !== 0 && col !== (columns-1) && revealedMatrix[row-1][col+1] === false)
     {
       revealedMatrix[row-1][col+1] = true;
 
@@ -206,7 +245,7 @@ $( document ).ready(function() {
       else $(".cell-row-"+(row-1)+".cell-column-"+(col+1)+" > p").show();
     }
 
-    if (row !== 6 && col !== 4 && revealedMatrix[row+1][col+1] === false)
+    if (row !== (rows-1) && col !== (columns-1) && revealedMatrix[row+1][col+1] === false)
     {
       revealedMatrix[row+1][col+1] = true;
 
@@ -216,7 +255,7 @@ $( document ).ready(function() {
       }
       else $(".cell-row-"+(row+1)+".cell-column-"+(col+1)+" > p").show();
     }
-    if (row !== 6  && revealedMatrix[row+1][col] === false)
+    if (row !== (rows-1)  && revealedMatrix[row+1][col] === false)
     {
       revealedMatrix[row+1][col] = true;
 
@@ -226,7 +265,7 @@ $( document ).ready(function() {
       }
       else $(".cell-row-"+(row+1)+".cell-column-"+(col)+" > p").show();
     }
-    if (col !== 4 && revealedMatrix[row][col+1] === false)
+    if (col !== (columns-1) && revealedMatrix[row][col+1] === false)
     {
       revealedMatrix[row][col+1] = true;
 
@@ -247,16 +286,32 @@ $( document ).ready(function() {
     displayClicked(row,col);
   });
 
-  $("body").on("click", ".dropdown-content", function() {
-    var difficulty = $('.dropdown-content option[value="Hard"]').attr('selected', true);
-  });
+  /* $("body").on("click", ".dropdown-content", function() {
+    debugger;
+      var difficulty = $('dropdown-content').find(":selected").text();
+  }); */
+
+  $("a").click(function(event) {
+
+              size = $(this).text();
+              alert("Press Reset to start the next game with a "+size+" sized board.")
+              event.preventDefault();
+          });
 
 
-
-  drawBoard();
-  plantMines();
-  calcAdjBombs();
   $("p > label:contains('1')").each(function () {
     $(this).html($(this).html().replace("1", "<span class='red'>*</span>"));
 });
+
+$(function(){
+    $('.reset').click(function() {
+       $("table").empty();
+        init();
+
+
+    });
+});
+
+
+init();
 });
