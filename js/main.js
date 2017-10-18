@@ -5,9 +5,10 @@ $(document).ready(function () {
     var plantedMines = 0,
         size,
         boardMatrix = [],
-        revealedMatrix = [];
-
-    var columns, rows, numMines;
+        revealedMatrix = [],
+        columns,
+        rows,
+        numMines;
 
     function init() {
         drawBoard();
