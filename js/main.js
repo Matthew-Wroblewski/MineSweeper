@@ -1,3 +1,6 @@
+/*jslint browser: true, plusplus: true */
+/*global $, console, document, alert */
+
 $(document).ready(function () {
     console.log("ready!");
     /// 1/5 mines
@@ -10,14 +13,11 @@ $(document).ready(function () {
         rows,
         numMines;
 
-    function init() {
-        drawBoard();
-        plantMines();
-        calcAdjBombs();
-    }
-
     function drawBoard() {
-        debugger;
+        // debugger;
+
+        var i, j;
+
         if (size !== "Large" && size !== "Normal" && size !== "Small") {
             size = "Normal";
         }
@@ -38,14 +38,13 @@ $(document).ready(function () {
         }
 
 
-        var i, j, fieldElement;
         for (i = 0; i < rows; i++) {
             $("table").append("<tr class='board-row-" + i + "'></tr>");
             boardMatrix[i] = [];
             revealedMatrix[i] = [];
 
             for (j = 0; j < columns; j++) {
-                $(".board-row-" + i + "").append("<td class='cell-row-" + i + " cell-column-" + j + "'>  </td>");
+                $(".board-row-" + i + " ").append("<td class='cell-row-" + i + " cell-column-" + j + "'>  </td>");
                 boardMatrix[i][j] = [];
                 revealedMatrix[i][j] = [];
                 boardMatrix[i][j] = false;
@@ -56,53 +55,51 @@ $(document).ready(function () {
         }
     }
 
+
     function plantMines() {
         var row, col;
         do {
             row = Math.floor(Math.random() * rows);
             col = Math.floor(Math.random() * columns);
-            if (boardMatrix[row][col] === true)
-                continue;
-            boardMatrix[row][col] = true;
+
+            if (boardMatrix[row][col] === false) {
+                boardMatrix[row][col] = true;
+                plantedMines++;
+            }
+
             //$(".cell-row-"+row+".cell-column-"+col+"").addClass("bomb");
             //    $(".bomb").css({"background-color": "yellow"});
-
-
-
-            plantedMines++;
-        }
-        while (numMines > plantedMines);
+        } while (numMines > plantedMines);
 
     }
 
-    $('td').click(function () {
-        var colIndex = $(this).prevAll().length;
-        var rowIndex = $(this).parent('tr').prevAll().length;
-    });
-
     function calcAdjBombs() {
-        var numBombs;
+        var numBombs, i, j;
         for (i = 0; i < rows; i++) {
             for (j = 0; j < columns; j++) {
                 numBombs = 0;
 
-                if (i !== 0 && j !== 0)
+                if (i !== 0 && j !== 0) {
                     if (boardMatrix[i - 1][j - 1] === true) {
                         numBombs++;
                     }
+                }
 
-                if (i !== 0)
+                if (i !== 0) {
                     if (boardMatrix[i - 1][j] === true) {
                         numBombs++;
                     }
-                if (j !== 0)
+                }
+                if (j !== 0) {
                     if (boardMatrix[i][j - 1] === true) {
                         numBombs++;
                     }
-                if (j !== 0 && i !== (rows - 1))
+                }
+                if (j !== 0 && i !== (rows - 1)) {
                     if (boardMatrix[i + 1][j - 1] === true) {
                         numBombs++;
                     }
+                }
 
                 if (i !== 0 && j !== (columns - 1))
                     if (boardMatrix[i - 1][j + 1] === true) {
@@ -161,21 +158,29 @@ $(document).ready(function () {
                     $(".cell-row-" + (i) + ".cell-column-" + (j) + " > p").css({
                         "color": "brown"
                     });
-
-
             }
-
         }
-
-
     }
+
+    function init() {
+        drawBoard();
+        plantMines();
+        calcAdjBombs();
+    }
+
+
+    /* $('td').click(function () {
+         var colIndex = $(this).prevAll().length;
+         var rowIndex = $(this).parent('tr').prevAll().length;
+     }); */
+
 
     function displayClicked(row, col) {
 
-
+        var i, j;
         if (boardMatrix[row][col] === true) {
             $(".cell-row-" + row + ".cell-column-" + col + "").addClass("bomb");
-            debugger;
+            // debugger;
             for (i = 0; i < rows; i++) {
                 for (j = 0; j < columns; j++) {
                     $(".cell-row-" + i + ".cell-column-" + j + " > p").show();
@@ -183,6 +188,7 @@ $(document).ready(function () {
                         $(".cell-row-" + (i) + ".cell-column-" + (j) + "").addClass("bomb");
                 }
             }
+
             alert("You've clicked on a bomb.  GAME OVER.");
         } else if (boardMatrix[row][col] > 0) {
             console.log("hi");
@@ -283,7 +289,7 @@ $(document).ready(function () {
     $("a").click(function (event) {
 
         size = $(this).text();
-        alert("Press Reset to start the next game with a " + size + " sized board.")
+        alert("Press Reset to start the next game with a " + size + " sized board.");
         event.preventDefault();
     });
 
